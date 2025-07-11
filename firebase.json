@@ -1,0 +1,25 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/admin.html",
+        "destination": "/admin.html"
+      },
+      {
+        "source": "/painel.html",
+        "destination": "/painel.html"
+      },
+      {
+        "source": "/status.html",
+        "destination": "/status.html"
+      }
+    ],
+    "errorPage": "/404.html"
+  }
+}

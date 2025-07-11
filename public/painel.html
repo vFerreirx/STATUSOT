@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="https://raw.githubusercontent.com/vFerreirx/Assinatura/refs/heads/main/icon_semfundo.png" type="image/png" />
+  <title>Painel de Entregas | On Time</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/painel.css">
+  <style>
+    #authLoader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      transition: opacity 0.3s ease;
+    }
+    
+    #authLoader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .spinner-lg {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: #b39364;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans">
+  <!-- Loader de autenticação -->
+  <div id="authLoader">
+    <div class="text-center">
+      <div class="spinner-lg mx-auto"></div>
+      <p class="mt-4 text-gray-700 font-medium">Verificando autenticação...</p>
+    </div>
+  </div>
+
+  <!-- Conteúdo Principal (inicialmente oculto) -->
+  <div id="appContent" class="min-h-screen hidden">
+    <!-- Header -->
+    <header class="corporate-header shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+          <div class="flex items-center gap-3">
+            <div class="bg-white bg-opacity-20 p-2 rounded-xl">
+              <i data-lucide="package" class="w-8 h-8 text-white"></i>
+            </div>
+            <div>
+              <h1 class="text-2xl font-bold text-white">Painel de Entregas</h1>
+              <p class="text-sm text-white text-opacity-80">Gerencie suas entregas com facilidade</p>
+            </div>
+          </div>
+          <div class="mt-4 flex md:mt-0 md:ml-4 header-buttons">
+            <button id="btnExportar" class="btn bg-white bg-opacity-20 text-white hover:bg-white hover:bg-opacity-30 border border-white border-opacity-30">
+              <i data-lucide="download" class="w-4 h-4 mr-2"></i> Exportar
+            </button>
+            <button id="btnImportar" class="btn ml-3 bg-secondary text-white hover:bg-secondary-dark">
+              <i data-lucide="upload" class="w-4 h-4 mr-2"></i> Importar XML
+            </button>
+            <button id="btnRastrear" class="btn ml-3 bg-primary text-white hover:bg-primary-dark">
+              <i data-lucide="map-pin" class="w-4 h-4 mr-2"></i> Rastrear Entrega
+            </button>
+            <button id="btnLogout" class="btn ml-3 bg-red-600 text-white hover:bg-red-700">
+              <i data-lucide="log-out" class="w-4 h-4 mr-2"></i> Sair
+            </button>
+            <input type="file" id="fileInput" accept=".xml" class="hidden" />
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+      <i data-lucide="info" class="w-5 h-5"></i>
+      <span id="toast-message">Mensagem de notificação</span>
+    </div>
+    
+    <!-- Modal de Confirmação -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div class="modal-card p-8">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="bg-red-100 p-3 rounded-xl">
+            <i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-gray-800">Confirmar Exclusão</h3>
+            <p class="text-gray-600">Tem certeza que deseja excluir esta entrega?</p>
+          </div>
+        </div>
+        <div class="flex justify-end gap-3">
+          <button id="modalCancel" class="btn btn-outline">Cancelar</button>
+          <button id="modalConfirm" class="btn bg-red-600 text-white hover:bg-red-700">Excluir</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <!-- Busca e Filtros -->
+      <div class="dashboard-card mb-6">
+        <div class="p-6">
+          <h2 class="text-lg font-medium text-gray-900 mb-4">Buscar Entregas</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="buscaCpfCnpj" class="block text-sm font-medium text-gray-700 mb-2">Buscar por CPF/CNPJ</label>
+              <div class="input-group">
+                <i data-lucide="user" class="input-icon"></i>
+                <input type="text" id="buscaCpfCnpj" placeholder="Digite CPF ou CNPJ" class="input-field">
+              </div>
+            </div>
+            <div>
+              <label for="buscaNotaFiscal" class="block text-sm font-medium text-gray-700 mb-2">Buscar por Nota Fiscal</label>
+              <div class="input-group">
+                <i data-lucide="file-text" class="input-icon"></i>
+                <input type="text" id="buscaNotaFiscal" placeholder="Digite Nº da Nota" class="input-field">
+              </div>
+            </div>
+            <div class="flex items-end space-x-2">
+              <button id="btnBuscar" class="btn btn-primary flex-1">
+                <i data-lucide="search" class="w-4 h-4 mr-2"></i> Buscar
+              </button>
+              <button id="btnMostrarTodos" class="btn btn-outline flex-1">
+                <i data-lucide="list" class="w-4 h-4 mr-2"></i> Mostrar Todos
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulário com indicador de importação -->
+      <div class="dashboard-card mb-6">
+        <div class="p-6">
+          <div class="form-header flex items-center justify-between mb-6">
+            <div>
+              <h2 id="formTitulo" class="text-xl font-bold text-gray-900">Cadastrar Nova Entrega</h2>
+              <div id="importIndicator" class="import-indicator hidden">
+                <i data-lucide="file-text"></i>
+              </div>
+            </div>
+            <button id="btnLimparForm" class="text-sm gold-highlight hover:text-secondary-dark flex items-center">
+              <i data-lucide="x" class="w-4 h-4 mr-1"></i> Limpar formulário
+            </button>
+          </div>
+          <form id="formEntrega" class="space-y-6">
+            <!-- Seção Remetente -->
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <div class="flex items-center gap-2 mb-4">
+                <i data-lucide="user" class="w-5 h-5 text-[#b39364]"></i>
+                <h3 class="font-medium text-[#b39364]">Remetente</h3>  
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="remetente" class="block text-sm font-medium text-gray-700 mb-2">Nome do Remetente*</label>
+                  <div class="input-group">
+                    <i data-lucide="user" class="input-icon"></i>
+                    <input type="text" id="remetente" required class="input-field">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Seção Destinatário -->
+            <div class="bg-green-50 p-4 rounded-lg mt-6">
+              <div class="flex items-center gap-2 mb-4">
+                <i data-lucide="package" class="w-5 h-5 text-[#b39364]"></i>
+                <h3 class="font-medium text-[#b39364]">Destinatário</h3> 
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="destinatario" class="block text-sm font-medium text-gray-700 mb-2">Destinatário*</label>
+                  <div class="input-group">
+                    <i data-lucide="user" class="input-icon"></i>
+                    <input type="text" id="destinatario" required class="input-field">
+                  </div>
+                </div>
+                <div>
+                  <label for="cpfCnpj" class="block text-sm font-medium text-gray-700 mb-2">CPF/CNPJ*</label>
+                  <div class="input-group">
+                    <i data-lucide="id-card" class="input-icon"></i>
+                    <input type="text" id="cpfCnpj" required class="input-field">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Seção Endereço -->
+            <div class="bg-white mt-6">
+              <div class="flex items-center gap-2 mb-4">
+                <i data-lucide="map-pin" class="w-5 h-5 text-[#b39364]"></i>
+                <h3 class="font-medium text-[#b39364]">Endereço de Entrega</h3> 
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <label for="rua" class="block text-sm font-medium text-gray-700 mb-2">Rua</label>
+                  <div class="input-group">
+                    <i data-lucide="map-pin" class="input-icon"></i>
+                    <input type="text" id="rua" class="input-field">
+                  </div>
+                </div>
+                <div>
+                  <label for="numero" class="block text-sm font-medium text-gray-700 mb-2">Número</label>
+                  <input type="text" id="numero" class="input-field">
+                </div>
+                <div>
+                  <label for="bairro" class="block text-sm font-medium text-gray-700 mb-2">Bairro</label>
+                  <input type="text" id="bairro" class="input-field">
+                </div>
+                <div>
+                  <label for="cidade" class="block text-sm font-medium text-gray-700 mb-2">Cidade</label>
+                  <input type="text" id="cidade" class="input-field">
+                </div>
+              </div>
+            </div>
+
+            <!-- Seção Informações da Entrega -->
+            <div class="bg-purple-50 p-4 rounded-lg mt-6">
+              <div class="flex items-center gap-2 mb-4">
+                <i data-lucide="info" class="w-5 h-5 text-[#b39364]"></i>
+                <h3 class="font-medium text-[#b39364]">Informações da Entrega</h3>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label for="notaFiscal" class="block text-sm font-medium text-gray-700 mb-2">Nº da Nota Fiscal</label>
+                  <div class="input-group">
+                    <i data-lucide="file-text" class="input-icon"></i>
+                    <input type="text" id="notaFiscal" class="input-field">
+                  </div>
+                </div>
+                <div>
+                  <label for="previsaoEntrega" class="block text-sm font-medium text-gray-700 mb-2">Previsão de Entrega</label>
+                  <div class="input-group">
+                    <i data-lucide="calendar" class="input-icon"></i>
+                    <input type="date" id="previsaoEntrega" class="input-field">
+                  </div>
+                </div>
+                <div>
+                  <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  <select id="status" class="input-field">
+                    <option value="CARGA EM ROTA DE ENTREGA">CARGA EM ROTA DE ENTREGA</option>
+                    <option value="CARGA EM TRANSITO">CARGA EM TRANSITO</option>
+                    <option value="CARGA SIMULTANEA CONCLUIDA">CARGA SIMULTANEA CONCLUIDA</option>
+                    <option value="CARGA ENDEREÇO ALTERADO">CARGA ENDEREÇO ALTERADO</option>
+                    <option value="CARGA COM COLETA FINALIZADA">CARGA COM COLETA FINALIZADA</option>
+                    <option value="CARGA COM ENTREGA FINALIZADA">CARGA COM ENTREGA FINALIZADA</option>
+                    <option value="CARGA OPERAÇÃO CONCLUIDA">CARGA OPERAÇÃO CONCLUIDA</option>
+                    <option value="CARGA COM OCORRENCIA">CARGA COM OCORRENCIA</option>
+                    <option value="CARGA COM EXTRAVIO">CARGA COM EXTRAVIO</option>
+                    <option value="CARGA COM TRANSITO ALTERADO">CARGA COM TRANSITO ALTERADO</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button type="submit" id="btnSalvar" class="btn btn-success">
+                <span id="btnText">
+                  <i data-lucide="save" class="w-5 h-5 mr-2"></i> Salvar Entrega
+                </span>
+                <span id="btnSpinner" class="hidden animate-spin ml-2">↻</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Lista de Entregas -->
+      <div class="dashboard-card">
+        <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+          <h2 class="text-lg font-bold text-gray-900">Entregas Cadastradas</h2>
+          <div class="text-sm text-gray-500" id="contador">Carregando...</div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 responsive-table">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remetente</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destinatário</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CPF/CNPJ</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nota Fiscal</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Endereço</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="lista-entregas" class="bg-white divide-y divide-gray-200">
+              <!-- Conteúdo será preenchido dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200">
+          <button id="btnCarregarMais" class="btn btn-outline w-full">
+            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Carregar Mais
+          </button>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="mt-12 py-6 text-center text-sm text-gray-500">
+      <div class="max-w-7xl mx-auto px-4">
+        <p>© 2025 On Time - Painel de Entregas. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { auth } from './js/firebase-config.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import './js/painel.js';
+    
+    const authLoader = document.getElementById('authLoader');
+    const appContent = document.getElementById('appContent');
+    
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Usuário autenticado:", user.email);
+        
+        // Esconder loader e mostrar conteúdo
+        setTimeout(() => {
+          authLoader.classList.add('hidden');
+          appContent.classList.remove('hidden');
+        }, 500);
+      } else {
+        console.warn("Usuário não autenticado. Redirecionando...");
+        window.location.href = "admin.html";
+      }
+    });
+    
+    // Fallback para falha no Firebase
+    setTimeout(() => {
+      if (authLoader && !authLoader.classList.contains('hidden')) {
+        console.error("Timeout de autenticação do Firebase");
+        authLoader.classList.add('hidden');
+        alert("Erro na conexão. Recarregue a página.");
+      }
+    }, 10000);
+  </script>
+</body>
+</html>
