@@ -160,7 +160,7 @@
           </div>
           <form id="formEntrega" class="space-y-6">
             <!-- Seção Remetente -->
-            <div class="bg-blue-50 p-4 rounded-lg">
+            <div class="bg-white-50  p-4 rounded-lg">
               <div class="flex items-center gap-2 mb-4">
                 <i data-lucide="user" class="w-5 h-5 text-[#b39364]"></i>
                 <h3 class="font-medium text-[#b39364]">Remetente</h3>  
@@ -177,7 +177,7 @@
             </div>
 
             <!-- Seção Destinatário -->
-            <div class="bg-green-50 p-4 rounded-lg mt-6">
+            <div class="bg-white-50 p-4 rounded-lg mt-6">
               <div class="flex items-center gap-2 mb-4">
                 <i data-lucide="package" class="w-5 h-5 text-[#b39364]"></i>
                 <h3 class="font-medium text-[#b39364]">Destinatário</h3> 
@@ -230,7 +230,7 @@
             </div>
 
             <!-- Seção Informações da Entrega -->
-            <div class="bg-purple-50 p-4 rounded-lg mt-6">
+            <div class="bg-white-50  p-4 rounded-lg mt-6">
               <div class="flex items-center gap-2 mb-4">
                 <i data-lucide="info" class="w-5 h-5 text-[#b39364]"></i>
                 <h3 class="font-medium text-[#b39364]">Informações da Entrega</h3>
@@ -253,6 +253,10 @@
                 <div>
                   <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                   <select id="status" class="input-field">
+                    <option value="PEDIDO CADASTRADO">PEDIDO CADASTRADO</option>
+                    <option value="AGUARDANDO COLETA">AGUARDANDO COLETA</option>
+                    <option value="AGUARDANDO DOCUMENTAÇÃO">AGUARDANDO DOCUMENTAÇÃO</option>
+                    <option value="AGUARDANDO DESPACHO">AGUARDANDO DESPACHO</option>
                     <option value="CARGA EM ROTA DE ENTREGA">CARGA EM ROTA DE ENTREGA</option>
                     <option value="CARGA EM TRANSITO">CARGA EM TRANSITO</option>
                     <option value="CARGA SIMULTANEA CONCLUIDA">CARGA SIMULTANEA CONCLUIDA</option>

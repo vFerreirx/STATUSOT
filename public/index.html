@@ -30,96 +30,80 @@
   </script>
   <link rel="stylesheet" href="/css/index.css">
 </head>
-<body>
-  <div class="dashboard-card">
-    <div class="hero-section">
-      <div class="logo-container">
-        <img src="https://raw.githubusercontent.com/vFerreirx/Assinatura/refs/heads/main/Logo_Ontime_nobg.png" 
-             alt="Logo Status On Time" 
-             class="w-16 h-auto"
-             loading="eager">
-      </div>
-      
-      <h1 class="compact-title font-bold">Painel de Entregas</h1>
-      <p class="compact-subtitle">
+<body class="bg-gray-50 font-sans">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+      <img src="https://raw.githubusercontent.com/vFerreirx/Assinatura/refs/heads/main/Logo_Ontime_nobg.png" 
+           alt="Logo Status On Time" 
+           class="mx-auto w-20 h-auto mb-4">
+      <h1 class="text-2xl sm:text-3xl font-bold text-primary">Painel de Entregas</h1>
+      <p class="text-sm sm:text-base text-gray-600 mt-2">
         Acompanhe e gerencie suas entregas com eficiência e precisão
       </p>
     </div>
-    
-    <!-- Content Section -->
-    <div class="content-section">
-      <h2 class="action-title font-bold text-primary">O que você deseja fazer?</h2>
-      <p class="action-subtitle text-gray-600">
-        Escolha entre as opções abaixo para acessar a área administrativa ou para acompanhar o status de suas entregas.
-      </p>
-      
-      <div class="features-grid">
-        <!-- Área do Admin -->
-        <div class="feature-card">
-          <div class="feature-icon admin-icon">
-            <i class="fas fa-user-shield"></i>
-          </div>
-          <h3 class="text-xl font-bold text-primary mb-2">Área do Admin</h3>
-          <p class="text-gray-600 mb-4 text-sm">
-            Acesse o painel administrativo para gerenciar entregas, visualizar relatórios e configurar o sistema.
-          </p>
-          <a href="painel.html" 
-             aria-label="Acessar área administrativa"
-             class="btn btn-admin">
-            <i class="fas fa-sign-in-alt mr-2"></i>Acessar Painel
-          </a>
+
+    <!-- Ações -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      <!-- Área do Admin -->
+      <div class="bg-white p-6 rounded-xl shadow-md text-center">
+        <div class="text-3xl text-primary mb-4">
+          <i class="fas fa-user-shield"></i>
         </div>
-        
-        <!-- Acompanhar Entrega -->
-        <div class="feature-card">
-          <div class="feature-icon track-icon">
-            <i class="fas fa-truck-fast"></i>
-          </div>
-          <h3 class="text-xl font-bold text-primary mb-2">Acompanhar Entrega</h3>
-          <p class="text-gray-600 mb-4 text-sm">
-            Verifique o status de suas entregas em tempo real com informações detalhadas sobre cada etapa.
-          </p>
-          <a href="status.html" 
-             aria-label="Acompanhar status de entrega"
-             class="btn btn-track">
-            <i class="fas fa-search-location mr-2"></i>Verificar Entrega
-          </a>
-        </div>
+        <h3 class="text-xl font-bold text-primary mb-2">Área do Admin</h3>
+        <p class="text-gray-600 mb-4 text-sm">
+          Acesse o painel administrativo para gerenciar entregas, visualizar relatórios e configurar o sistema.
+        </p>
+        <a href="admin.html" class="inline-block px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90">
+          <i class="fas fa-sign-in-alt mr-2"></i>Acessar Painel
+        </a>
       </div>
-      
-      <!-- Estatísticas -->
-      <div class="stats-container">
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-map-marked-alt"></i>
-          </div>
-          <div class="stat-number">+500</div>
-          <div class="stat-label">Cidades Atendidas</div>
+
+      <!-- Acompanhar Entrega -->
+      <div class="bg-white p-6 rounded-xl shadow-md text-center">
+        <div class="text-3xl text-primary mb-4">
+          <i class="fas fa-truck-fast"></i>
         </div>
-        
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <div class="stat-number">+200</div>
-          <div class="stat-label">Clientes Ativos</div>
-        </div>
-        
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-check-circle"></i>
-          </div>
-          <div class="stat-number">98%</div>
-          <div class="stat-label">Entregas Concluídas</div>
-        </div>
+        <h3 class="text-xl font-bold text-primary mb-2">Acompanhar Entrega</h3>
+        <p class="text-gray-600 mb-4 text-sm">
+          Verifique o status de suas entregas em tempo real com informações detalhadas sobre cada etapa.
+        </p>
+        <a href="status.html" class="inline-block px-4 py-2 bg-primary text-white rounded hover:bg-opacity-90">
+          <i class="fas fa-search-location mr-2"></i>Verificar Entrega
+        </a>
       </div>
-      
-      <footer>
-        © 2025 <strong>On Time</strong>. Todos os direitos reservados.
-      </footer>
     </div>
+
+    <!-- Estatísticas -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      <div class="bg-white p-4 rounded-lg shadow text-center">
+        <div class="text-2xl text-secondary mb-2">
+          <i class="fas fa-map-marked-alt"></i>
+        </div>
+        <div class="text-lg font-bold">+500</div>
+        <div class="text-sm text-gray-600">Cidades Atendidas</div>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow text-center">
+        <div class="text-2xl text-secondary mb-2">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="text-lg font-bold">+200</div>
+        <div class="text-sm text-gray-600">Clientes Ativos</div>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow text-center">
+        <div class="text-2xl text-secondary mb-2">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="text-lg font-bold">98%</div>
+        <div class="text-sm text-gray-600">Entregas Concluídas</div>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="text-center text-sm text-gray-500">
+      © 2025 <strong>On Time</strong>. Todos os direitos reservados.
+    </footer>
   </div>
-  
+
   <noscript>
     <div class="bg-red-100 text-red-800 p-4 rounded-lg mb-4 max-w-md fixed top-4 left-4 right-4 z-50">
       JavaScript é necessário para o funcionamento completo deste site.

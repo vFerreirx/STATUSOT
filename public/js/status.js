@@ -9,12 +9,12 @@ import {
 
 // Configuração do Firebase
 const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  projectId: "...",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
+  apiKey: "AIzaSyCkPAb4KzY-zApNzd4RW6BAnqtUb422Bh0",
+  authDomain: "status-on-time.firebaseapp.com",
+  projectId: "status-on-time",
+  storageBucket: "status-on-time.appspot.com",
+  messagingSenderId: "89519416671",
+  appId: "1:89519416671:web:2c01c026187f2643c782ea"
 };
 
 // Inicializa o Firebase
@@ -135,8 +135,9 @@ function abrirWhatsApp() {
 }
 
 function mostrarAjuda() {
-  window.open('mailto:sac@otlog.com.br', '_blank');
+  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=sac@otlog.com.br', '_blank');
 }
+
 
 function displayEntrega(entrega) {
     const statusInfo = getStatusInfo(entrega.status);
@@ -262,8 +263,8 @@ function displayEntrega(entrega) {
             <h3 class="font-semibold text-gray-700 mb-2 flex items-center">
               <i class="fas fa-map-marker-alt info-icon mr-2"></i>Endereço
             </h3>
-            <p class="font-semibold text-gray-800 text-xs">${entrega.rua}, Nº ${entrega.numero}</p>
-            <p class="font-semibold text-gray-800 text-xs">${entrega.bairro}, ${entrega.cidade}</p>
+            <p class="font-semibold text-gray-800 text-xs">Rua: ${entrega.rua}, Nº ${entrega.numero}</p>
+            <p class="font-semibold text-gray-800 text-xs">Bairro: ${entrega.bairro}, ${entrega.cidade}</p>
           </div>
         </div>
         
@@ -288,6 +289,14 @@ function displayEntrega(entrega) {
 // Descrição do status
 function getStatusDescription(status) {
   switch(status) {
+    case "PEDIDO CADASTRADO":
+      return "Seu pedido foi registrado no sistema e em breve será processado.";
+    case "AGUARDANDO COLETA":
+      return "Aguardando a coleta do produto no ponto de origem.";
+    case "AGUARDANDO DOCUMENTAÇÃO":
+      return "Falta documentação para prosseguir (nota fiscal ou comprovantes).";
+    case "AGUARDANDO DESPACHO":
+      return "Pedido pronto e aguardando liberação para despacho.";
     case "CARGA EM ROTA DE ENTREGA":
       return "Sua encomenda está em rota de entrega e deve chegar em breve.";
     case "CARGA EM TRANSITO":
@@ -316,6 +325,34 @@ function getStatusDescription(status) {
 // Mapeamento dos status
 function getStatusInfo(status) {
   switch (status) {
+    case "PEDIDO CADASTRADO":
+      return {
+        label: "PEDIDO CADASTRADO",
+        icon: '<i class="fas fa-clipboard-list text-indigo-700 text-lg"></i>',
+        badgeClass: "bg-indigo-100 text-indigo-800",
+        indicatorClass: "bg-indigo-500"
+      };
+    case "AGUARDANDO COLETA":
+      return {
+        label: "AGUARDANDO COLETA",
+        icon: '<i class="fas fa-hand-holding text-blue-700 text-lg"></i>',
+        badgeClass: "bg-blue-100 text-blue-800",
+        indicatorClass: "bg-blue-500"
+      };
+    case "AGUARDANDO DOCUMENTAÇÃO":
+      return {
+        label: "AGUARDANDO DOCUMENTAÇÃO",
+        icon: '<i class="fas fa-file-alt text-yellow-700 text-lg"></i>',
+        badgeClass: "bg-yellow-100 text-yellow-800",
+        indicatorClass: "bg-yellow-500"
+      };
+    case "AGUARDANDO DESPACHO":
+      return {
+        label: "AGUARDANDO DESPACHO",
+        icon: '<i class="fas fa-warehouse text-teal-700 text-lg"></i>',
+        badgeClass: "bg-teal-100 text-teal-800",
+        indicatorClass: "bg-teal-500"
+      };
     case "CARGA EM ROTA DE ENTREGA":
       return {
         label: "EM ROTA DE ENTREGA",

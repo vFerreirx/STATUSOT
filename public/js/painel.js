@@ -37,6 +37,10 @@ const previsaoEntrega = document.getElementById("previsaoEntrega");
 
 // Lista dos novos status de entrega
 const statusEntregas = [
+  "PEDIDO CADASTRADO",
+  "AGUARDANDO COLETA",
+  "AGUARDANDO DOCUMENTAÇÃO",
+  "AGUARDANDO DESPACHO",
   "CARGA EM ROTA DE ENTREGA",
   "CARGA EM TRANSITO",
   "CARGA SIMULTANEA CONCLUIDA",
@@ -165,6 +169,10 @@ const limparFormulario = () => {
 
 const criarBadge = (status) => {
   const statusClasses = {
+    "PEDIDO CADASTRADO": { indicator: "bg-indigo-500", badge: "bg-indigo-100 text-indigo-800" },
+    "AGUARDANDO COLETA": { indicator: "bg-blue-400",   badge: "bg-blue-50 text-blue-700"   },
+    "AGUARDANDO DOCUMENTAÇÃO": { indicator: "bg-yellow-400", badge: "bg-yellow-50 text-yellow-700" },
+    "AGUARDANDO DESPACHO": { indicator: "bg-teal-400",  badge: "bg-teal-50 text-teal-700"   },
     "CARGA EM ROTA DE ENTREGA": { indicator: "bg-blue-500", badge: "bg-blue-100 text-blue-800" },
     "CARGA EM TRANSITO": { indicator: "bg-purple-500", badge: "bg-purple-100 text-purple-800" },
     "CARGA SIMULTANEA CONCLUIDA": { indicator: "bg-green-500", badge: "bg-green-100 text-green-800" },
