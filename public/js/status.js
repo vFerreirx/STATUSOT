@@ -263,8 +263,8 @@ function displayEntrega(entrega) {
             <h3 class="font-semibold text-gray-700 mb-2 flex items-center">
               <i class="fas fa-map-marker-alt info-icon mr-2"></i>Endereço
             </h3>
-            <p class="font-semibold text-gray-800 text-xs">Rua: ${entrega.rua}, Nº ${entrega.numero}</p>
-            <p class="font-semibold text-gray-800 text-xs">Bairro: ${entrega.bairro}, ${entrega.cidade}</p>
+            <p class="font-semibold text-gray-800 text-xs">${entrega.rua}, Nº ${entrega.numero}</p>
+            <p class="font-semibold text-gray-800 text-xs">${entrega.bairro}, ${entrega.cidade}${entrega.uf ? '/' + entrega.uf : ''}</p>
           </div>
         </div>
         

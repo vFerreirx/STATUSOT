@@ -206,8 +206,9 @@
                 <i data-lucide="map-pin" class="w-5 h-5 text-[#b39364]"></i>
                 <h3 class="font-medium text-[#b39364]">Endereço de Entrega</h3> 
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-2">
                   <label for="rua" class="block text-sm font-medium text-gray-700 mb-2">Rua</label>
                   <div class="input-group">
                     <i data-lucide="map-pin" class="input-icon"></i>
@@ -216,7 +217,7 @@
                 </div>
                 <div>
                   <label for="numero" class="block text-sm font-medium text-gray-700 mb-2">Número</label>
-                  <input type="text" id="numero" class="input-field">
+                  <input type="text" id="numero" class="input-field w-full max-w-[120px]">
                 </div>
                 <div>
                   <label for="bairro" class="block text-sm font-medium text-gray-700 mb-2">Bairro</label>
@@ -225,6 +226,14 @@
                 <div>
                   <label for="cidade" class="block text-sm font-medium text-gray-700 mb-2">Cidade</label>
                   <input type="text" id="cidade" class="input-field">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                <div class="md:col-span-4"></div>
+                <div>
+                  <label for="uf" class="block text-sm font-medium text-gray-700 mb-2">UF</label>
+                  <input type="text" id="uf" maxlength="2" class="input-field w-full max-w-[100px]">
                 </div>
               </div>
             </div>

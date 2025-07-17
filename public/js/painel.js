@@ -30,6 +30,7 @@ const rua = document.getElementById("rua");
 const numero = document.getElementById("numero");
 const bairro = document.getElementById("bairro");
 const cidade = document.getElementById("cidade");
+const uf = document.getElementById("uf");
 const notaFiscal = document.getElementById("notaFiscal");
 const statusSelect = document.getElementById("status");
 const remetente = document.getElementById("remetente");
@@ -121,6 +122,7 @@ const parseXML = (file) => {
         const numero = getValue(enderDest, "nro");
         const bairro = getValue(enderDest, "xBairro");
         const cidade = getValue(enderDest, "xMun");
+        const uf = getValue(enderDest, "UF");
         const notaFiscal = getValue(ide, "nNF");
 
         // Extrair dados do remetente
@@ -138,6 +140,7 @@ const parseXML = (file) => {
           numero: numero || "",
           bairro: bairro || "",
           cidade: cidade || "",
+          uf: uf || "",
           notaFiscal: notaFiscal || "",
           status: "CARGA EM ROTA DE ENTREGA",
           remetente: remetente || ""
@@ -274,7 +277,7 @@ const carregarEntregas = async (reset = true) => {
     snapshot.forEach(docSnap => {
       const d = docSnap.data();
       const id = docSnap.id;
-      const endereco = `${d.rua || ""}, ${d.numero || ""} - ${d.bairro || ""}, ${d.cidade || ""}`;
+      const endereco = `${d.rua || ""}, ${d.numero || ""} - ${d.bairro || ""}, ${d.cidade || ""}${d.uf ? '/' + d.uf : ''}`;
 
       let previsaoFormatada = "-";
       if (d.previsaoEntrega) {
@@ -335,6 +338,7 @@ const carregarEntregas = async (reset = true) => {
           if (numero) numero.value = d.numero || "";
           if (bairro) bairro.value = d.bairro || "";
           if (cidade) cidade.value = d.cidade || "";
+          if (uf) uf.value = d.uf || "";
           if (notaFiscal) notaFiscal.value = d.notaFiscal || "";
           if (statusSelect) statusSelect.value = d.status || "CARGA EM ROTA DE ENTREGA";
 
@@ -467,6 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (numero) numero.value = importedData.numero || "";
         if (bairro) bairro.value = importedData.bairro || "";
         if (cidade) cidade.value = importedData.cidade || "";
+        if (uf) uf.value = importedData.uf || "";
         if (notaFiscal) notaFiscal.value = importedData.notaFiscal || "";
         if (statusSelect) statusSelect.value = importedData.status || "CARGA EM ROTA DE ENTREGA";
         if (remetente) remetente.value = importedData.remetente || "";
@@ -503,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Verificação de segurança extra
       const elementos = {
-        destinatario, cpfCnpj, rua, numero, bairro, cidade, 
+        destinatario, cpfCnpj, rua, numero, bairro, cidade, uf,
         notaFiscal, statusSelect, remetente, previsaoEntrega
       };
       
@@ -524,6 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
         numero: numero.value.trim(),
         bairro: bairro.value.trim(),
         cidade: cidade.value.trim(),
+        uf: uf.value.trim(),       
         notaFiscal: notaFiscal.value.trim(),
         status: statusSelect.value,
         previsaoEntrega: previsaoEntrega.value || null
@@ -692,6 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
     numero,
     bairro,
     cidade,
+    uf,
     notaFiscal,
     statusSelect,
     remetente,
